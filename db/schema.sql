@@ -13,18 +13,25 @@ CREATE DATABASE IF NOT EXISTS iot_metering
 
 USE iot_metering;
 
+CREATE TABLE IF NOT EXISTS meters (
+	meter_id VARCHAR(100) PRIMARY KEY,
+	name VARCHAR(200) NOT NULL,
+	description TEXT,
+	created_at_utc DATETIME NOT NULL
+);
+
 -- One row per meter is 15-minute window, mirroring the Pis local database
 CREATE TABLE IF NOT EXISTS meter_aggregates(
-	id INT AUTO_INCREMENT PRIMARY KEY 
+	id INT AUTO_INCREMENT PRIMARY KEY, 
 	meter_id VARCHAR(100) NOT NULL,
 	window_start_utc DATETIME NOT NULL,
 	window_end_utc DATETIME NOT NULL,
-	--exact decimal number that 12 degits before decimal point and 6 digits after decimal point
-	energy_delta_kwh DECIMAL(12,6) NOT NULL
+	-- exact decimal number that 12 degits before decimal point and 6 digits after decimal point
+	energy_delta_kwh DECIMAL(12,6) NOT NULL,
 	received_at_utc DATETIME NOT NULL,
 	-- when doing this command UNIQUE KEY, the database create an extra interl data structure beside the main table storage. 
 	-- The extra structure is a B-tree index.
-	UNIQUE KEY uq_meter_window (meter_id, window_start_utc, window_end_utc)
+	UNIQUE KEY uq_meter_window (meter_id, window_start_utc, window_end_utc),
 	FOREIGN KEY (meter_id)
 		REFERENCES meters(meter_id)
 		ON UPDATE CASCADE

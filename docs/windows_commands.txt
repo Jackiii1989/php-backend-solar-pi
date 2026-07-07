@@ -1,0 +1,29 @@
+## DATABASE
+# insert the schema in the database
+Get-Content db\schema.sql | mysql -u root -p
+
+# enter a meter:
+mysql -u root -p -e "INSERT INTO iot_metering.meters (meter_id, name, description, created_at_utc) VALUES ('mock-meter-001', 'Mock meter 1', 'Development test meter', UTC_TIMESTAMP());"
+
+# you get an error ERROR 1452 foreign key constraint fails 
+mysql -u root -p -e "INSERT INTO iot_metering.meter_aggregates (meter_id, window_start_utc, window_end_utc, energy_delta_kwh, received_at_utc) VALUES ('ghost-meter', '2026-07-06 10:00:00', '2026-07-06 10:15:00', 1000.0, UTC_TIMESTAMP());"
+
+# create a user and define which user rights it has:
+mysql -u root -p -e "CREATE USER IF NOT EXISTS 'iot_meter_backend'@'localhost' IDENTIFIED BY 'test99'; GRANT SELECT, INSERT ON iot_metering.* TO 'iot_meter_backend'@'localhost';"
+
+# change password for the 
+mysql -u root -p -e "ALTER USER 'iot_meter_backend'@'localhost' IDENTIFIED BY 'the-new-password';"
+
+# drop user
+mysql -u root -p -e "DROP USER IF EXISTS 'iot_meter_backend'@'localhost';"
+
+# see the tables.
+mysql -u iot_meter_backend -p -e "SHOW TABLES FROM iot_metering;"
+
+
+## Testing PHP
+# testing config:
+php -r "require 'src/config.php'; echo config('DB_NAME');"
+
+# test config 2
+php -r "require 'src/config.php'; echo config('API_TOKEN');"
