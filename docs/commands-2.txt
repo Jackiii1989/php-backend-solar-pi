@@ -11,7 +11,7 @@ php -S 0.0.0.0:8000 -t public
 
 
 
-
+$TOKEN = "test123"
 
 # the happy path — expect: HTTP/1.1 200 OK + the JSON
 curl -i "http://localhost:8000/load_profile.php" -H "Authorization: Bearer $TOKEN"
