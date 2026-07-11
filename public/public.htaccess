@@ -1,0 +1,6 @@
+# Apache strips the Authorization header before handing requests to
+# FastCGI/FPM (a security default). Capture it and re-inject it as an
+# environment variable, so PHP sees $_SERVER['HTTP_AUTHORIZATION'] again.
+<IfModule mod_setenvif.c>
+    SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1
+</IfModule>
