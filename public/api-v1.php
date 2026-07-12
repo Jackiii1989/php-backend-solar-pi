@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 // "?? ''" (null coalescing) substitutes an empty string — the function
 // always receives a real string, and "missing" flows into the normal
 // comparison as a failed match.
-require_bearer_token($_SERVER['HTTP_AUTHORIZATION'] ?? '', 'test123');
+require_bearer_token($_SERVER['HTTP_AUTHORIZATION'] ?? '', config('API_TOKEN'));
 
 
 // ── Gate 3: the ?date= query parameter ───────────────────────────────────
@@ -68,7 +68,7 @@ respond(200, [
     'meter_id'           => 'mock-meter-001',
     'date'               => $date,
     'resolution_minutes' => 15,
-    'unit'               => 'kWh',
+    'unit'  			 => 'CHF/kWh',
     'source'             => 'mock',
 
     // "slots" stays an ARRAY even with one element (note the double [[ ):
@@ -88,7 +88,7 @@ respond(200, [
             // The unit lives INSIDE the slot (like ESIT) so that future
             // price components can each carry their own unit.
             'value' => 0.15,
-            'unit'  => 'CHF/kWh',
+            
         ],
     ],
 ]);
