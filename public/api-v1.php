@@ -6,7 +6,7 @@ declare(strict_types=1);
 // __DIR__ = the folder THIS file lives in (public/), so the paths work no
 // matter where the web server was started from. ../src is OUTSIDE the web
 // root: helpers and config can never be requested directly by a browser.
-//require_once __DIR__ . '/../src/config.php';
+require_once __DIR__ . '/../src/config.php';
 require_once __DIR__ . '/../src/api-helper.php';
 
 
