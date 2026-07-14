@@ -145,6 +145,13 @@ try {
     // server-side, reveal nothing (no SQL, no schema names) outward.
     error_log('ingest.php insert failed: ' . $e->getMessage());
     respond(500, ['error' => 'Internal server error.']);
+} catch (Throwable $e) {
+    // Safety net for everything else — including the RuntimeException
+    // that db() throws when the connection itself fails. Throwable is
+    // the top of PHP's error hierarchy: NOTHING gets past this, so every
+    // failure exits through respond() and the JSON contract holds.
+    error_log('ingest.php failed: ' . $e->getMessage());
+    respond(500, ['error' => 'Internal server error.']);
 }
 
 respond(201, ['status' => 'created']);

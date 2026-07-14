@@ -1,0 +1,1 @@
+Layer 1 — never let raw traces reach a client on the server: on Plesk, PHP settings for the domain must have display_errors=Off, log_errors=On. (Your punch list gets a new entry.)

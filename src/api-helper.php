@@ -147,3 +147,25 @@ function read_json_body(): array
     // helper: convert "wire format" to "language values" at the boundary.
     return $payload;
 } 
+
+
+/**
+ * Outbound twin of parse_utc_datetime():
+ * storage format -> wire format.
+ *
+ * "2026-07-12 10:00:00" (MySQL DATETIME, UTC by our convention)
+ *   -> "2026-07-12T10:00:00+00:00" (ISO 8601 / ATOM).
+ *
+ * The DATETIME column stores no timezone — the "UTC" is OUR rule
+ * (decision #6), which is why we must pin new DateTimeZone('UTC') here:
+ * without it PHP would assume the server's local timezone and shift
+ * every timestamp on a non-UTC machine.
+ */
+function format_utc_atom(string $mysqlDatetime): string
+{
+    return DateTimeImmutable::createFromFormat(
+        'Y-m-d H:i:s',
+        $mysqlDatetime,
+        new DateTimeZone('UTC')
+    )->format(DateTimeInterface::ATOM);
+}
