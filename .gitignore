@@ -3,3 +3,4 @@
 
 # project internal files
 /public/_*
+/backup/
